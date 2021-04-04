@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
 @Table(name="users")
 public class User {
