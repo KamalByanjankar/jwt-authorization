@@ -17,15 +17,15 @@ public class Role {
 	private Long id;
 	
 	@Enumerated(EnumType.STRING)
-	private ERole role_name;
+	private ERole roleName;
 
 	public Role() {
 		super();
 	}
 
-	public Role(ERole role_name) {
+	public Role(ERole roleName) {
 		super();
-		this.role_name = role_name;
+		this.roleName = roleName;
 	}
 
 	public Long getId() {
@@ -36,12 +36,12 @@ public class Role {
 		this.id = id;
 	}
 
-	public ERole getRole_name() {
-		return role_name;
+	public ERole getRoleName() {
+		return roleName;
 	}
 
-	public void setRole_name(ERole role_name) {
-		this.role_name = role_name;
+	public void setRole_name(ERole roleName) {
+		this.roleName = roleName;
 	}
 	
 	

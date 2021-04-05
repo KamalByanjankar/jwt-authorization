@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/test")
 public class HomeController {
 	
 	@RequestMapping(value="/all", method=RequestMethod.GET)
