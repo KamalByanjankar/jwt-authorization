@@ -26,8 +26,7 @@ public class SignupRequest {
 		
 	}
 
-	public SignupRequest(@NotBlank String userName, @NotBlank @Email String email, @NotBlank String password,
-			Set<String> role) {
+	public SignupRequest(String userName, String email, String password, Set<String> role) {
 		this.userName = userName;
 		this.email = email;
 		this.password = password;

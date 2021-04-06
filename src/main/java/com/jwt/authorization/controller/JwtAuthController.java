@@ -1,7 +1,9 @@
 package com.jwt.authorization.controller;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -10,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +29,7 @@ import com.jwt.authorization.payload.response.JwtResponse;
 import com.jwt.authorization.payload.response.MessageResponse;
 import com.jwt.authorization.repository.RoleRepository;
 import com.jwt.authorization.repository.UserRepository;
+import com.jwt.authorization.service.UserDetailsImpl;
 import com.jwt.authorization.service.UserDetailsServiceImpl;
 import com.jwt.authorization.utility.JwtUtils;
 
@@ -58,6 +61,7 @@ public class JwtAuthController {
 		
 		try{
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUserName(), loginRequest.getPassword()));
+			
 		}
 		catch(UsernameNotFoundException e){
 			e.printStackTrace();
@@ -69,13 +73,28 @@ public class JwtAuthController {
 		}
 				
 		
-		UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginRequest.getUserName());
+		UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsServiceImpl.loadUserByUsername(loginRequest.getUserName());
+		
 		
 		String jwtToken = jwtUtils.generateToken(userDetails);
-		System.out.println("JWT TOKEN:" + jwtToken);
+		List<String> roles = userDetails.getAuthorities().stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList());
+		
 
-
-		return ResponseEntity.ok(new JwtResponse(jwtToken));
+		return ResponseEntity.ok(new JwtResponse(jwtToken,
+				userDetails.getId(), 
+				userDetails.getUsername(), 
+				userDetails.getEmail(), 
+				roles));
+		
+//		UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginRequest.getUserName());
+//		
+//		String jwtToken = jwtUtils.generateToken(userDetails);
+//		System.out.println("JWT TOKEN:" + jwtToken);
+//
+//
+//		return ResponseEntity.ok(new JwtResponse(jwtToken));
 	}
 	
 	@RequestMapping(value="/signup", method = RequestMethod.POST)

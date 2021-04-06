@@ -41,6 +41,21 @@ public class UserDetailsImpl implements UserDetails{
 	}
 	
 	
+	public static UserDetailsImpl build(User user) {
+		List<GrantedAuthority> authorities = user.getRoles().stream()
+				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
+				.collect(Collectors.toList());
+		
+		return new UserDetailsImpl(
+				user.getId(),
+				user.getUserName(),
+				user.getPassword(),
+				user.getEmail(),
+				authorities
+				);
+	}
+	
+	
 
 
 	public Long getId() {
@@ -80,20 +95,6 @@ public class UserDetailsImpl implements UserDetails{
 
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = authorities;
-	}
-
-
-	public static UserDetailsImpl build(User user) {
-		List<GrantedAuthority> authorities = user.getRoles().stream()
-				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
-				.collect(Collectors.toList());
-		return new UserDetailsImpl(
-				user.getId(),
-				user.getEmail(),
-				user.getPassword(),
-				user.getEmail(),
-				authorities
-				);
 	}
 
 

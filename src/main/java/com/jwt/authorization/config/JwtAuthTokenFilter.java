@@ -15,16 +15,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.jwt.authorization.service.UserDetailsServiceImpl;
 import com.jwt.authorization.utility.JwtUtils;
 
 @Component
-public class AuthTokenFilter extends OncePerRequestFilter{
+public class JwtAuthTokenFilter extends OncePerRequestFilter{
 	
-	private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+	private static final Logger logger = LoggerFactory.getLogger(JwtAuthTokenFilter.class);
 	
 	@Autowired
 	private JwtUtils jwtUtils;
@@ -36,35 +35,36 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		try {
-			String jwt = parseJwt(request);
+		
+		String jwtTokenHeader = request.getHeader("Authorization");
+		String username = null;
+		String jwtToken = null;
+		
+		if(jwtTokenHeader != null && jwtTokenHeader.startsWith("Bearer ")) {
+			jwtToken = jwtTokenHeader.substring(7, jwtTokenHeader.length());
 			
-			if(jwt != null && jwtUtils.validateJwtToken(jwt)) {
-				String username = jwtUtils.getUserNameFromJwtToken(jwt);
+			try {
+				username = jwtUtils.extractUsername(jwtToken);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				logger.error("Cannot set user authentication: {}", e);
+			}
+			
+			UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+			
+			if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 				
-				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 				
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			logger.error("Cannot set user authentication: {}", e);
+			else {
+				System.out.println("Token is not valid");
+			}
 		}
 		
 		filterChain.doFilter(request, response);
 	}
-
-	private String parseJwt(HttpServletRequest request) {
-		String headerAuth = request.getHeader("Authentication");
-		
-		if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-			return headerAuth.substring(7, headerAuth.length());
-		}
-		
-		return null;
-	}
-
 }
