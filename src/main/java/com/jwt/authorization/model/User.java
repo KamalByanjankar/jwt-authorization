@@ -13,14 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 
 @Entity
 @Table(name="users", uniqueConstraints = { 
-		@UniqueConstraint(columnNames = "userName"),
-		@UniqueConstraint(columnNames = "email") 
+		@UniqueConstraint(columnNames = "userName")
 	})
 public class User {
 
@@ -30,10 +28,6 @@ public class User {
 	
 	@NotBlank
 	private String userName;
-	
-	@NotBlank
-	@Email
-	private String email;
 	
 	@NotBlank
 	private String password;
@@ -49,9 +43,8 @@ public class User {
 
 	}
 
-	public User(String userName,  String email, String password) {
+	public User(String userName, String password) {
 		this.userName = userName;
-		this.email = email;
 		this.password = password;
 	}
 
@@ -69,14 +62,6 @@ public class User {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 	
 	public String getPassword() {

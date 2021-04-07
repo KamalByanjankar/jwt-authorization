@@ -84,7 +84,6 @@ public class JwtAuthController {
 		return ResponseEntity.ok(new JwtResponse(jwtToken,
 				userDetails.getId(), 
 				userDetails.getUsername(), 
-				userDetails.getEmail(), 
 				roles)
 				);
 		
@@ -97,13 +96,9 @@ public class JwtAuthController {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username already in exists"));
 		}
 		
-		if (userRepository.existsByEmail(signupRequest.getEmail())) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email already exists"));
-		}
-		
 		
 		//Create new User account
-		User user = new User(signupRequest.getUserName(), signupRequest.getEmail(), passwordEncoder.encode(signupRequest.getPassword()));
+		User user = new User(signupRequest.getUserName(), passwordEncoder.encode(signupRequest.getPassword()));
 		
 		Set<String> strRoles = signupRequest.getRole();
 		Set<Role> roles = new HashSet<>();

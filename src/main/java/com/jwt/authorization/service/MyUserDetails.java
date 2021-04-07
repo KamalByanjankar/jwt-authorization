@@ -17,11 +17,12 @@ public class MyUserDetails implements UserDetails{
 	private static final long serialVersionUID = 1L;
 	
 	private Long id;
+	
 	private String userName;
 	
 	@JsonIgnore
 	private String password;
-	private String email;
+	
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	
@@ -30,12 +31,11 @@ public class MyUserDetails implements UserDetails{
 	}
 
 
-	public MyUserDetails(Long id, String userName, String password, String email,
+	public MyUserDetails(Long id, String userName, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.userName = userName;
 		this.password = password;
-		this.email = email;
 		this.authorities = authorities;
 	}
 	
@@ -49,7 +49,6 @@ public class MyUserDetails implements UserDetails{
 				user.getId(),
 				user.getUserName(),
 				user.getPassword(),
-				user.getEmail(),
 				authorities
 				);
 	}
@@ -75,17 +74,6 @@ public class MyUserDetails implements UserDetails{
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
-
-	public String getEmail() {
-		return email;
-	}
-
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
 
 	public void setPassword(String password) {
 		this.password = password;
