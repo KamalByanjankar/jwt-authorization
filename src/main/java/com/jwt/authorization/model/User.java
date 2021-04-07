@@ -12,12 +12,16 @@ import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 
 @Entity
-@Table(name="users")
+@Table(name="users", uniqueConstraints = { 
+		@UniqueConstraint(columnNames = "userName"),
+		@UniqueConstraint(columnNames = "email") 
+	})
 public class User {
 
 	@Id
@@ -42,7 +46,7 @@ public class User {
 	private Set<Role> roles = new HashSet<>();
 
 	public User() {
-		super();
+
 	}
 
 	public User(String userName,  String email, String password) {
@@ -90,12 +94,6 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
-	}
-
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", userName=" + userName + ", password=" + password + ", email=" + email + ", roles="
-				+ roles + "]";
 	}
 	
 	

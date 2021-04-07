@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -88,14 +87,8 @@ public class JwtAuthController {
 				userDetails.getEmail(), 
 				roles));
 		
-//		UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginRequest.getUserName());
-//		
-//		String jwtToken = jwtUtils.generateToken(userDetails);
-//		System.out.println("JWT TOKEN:" + jwtToken);
-//
-//
-//		return ResponseEntity.ok(new JwtResponse(jwtToken));
 	}
+	
 	
 	@RequestMapping(value="/signup", method = RequestMethod.POST)
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) throws Exception{
@@ -110,13 +103,13 @@ public class JwtAuthController {
 		
 		//Create new User account
 		User user = new User(signupRequest.getUserName(), signupRequest.getEmail(), passwordEncoder.encode(signupRequest.getPassword()));
+		
 		Set<String> strRoles = signupRequest.getRole();
 		Set<Role> roles = new HashSet<>();
 		
 		if(strRoles == null) {
 			Role userRole = roleRepository.findByRoleName(ERole.ROLE_USER);
 			roles.add(userRole);
-			
 		}
 		
 		else {
@@ -125,14 +118,12 @@ public class JwtAuthController {
 				case "admin":
 					Role adminRole = roleRepository.findByRoleName(ERole.ROLE_ADMIN);
 					roles.add(adminRole);
-					
 					break;
 					
 					
 				default: 
 					Role userRole = roleRepository.findByRoleName(ERole.ROLE_USER);
 					roles.add(userRole);
-
 				}
 			});
 		}
