@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jwt.authorization.model.User;
 
 
-public class UserDetailsImpl implements UserDetails{
+public class MyUserDetails implements UserDetails{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -25,12 +25,12 @@ public class UserDetailsImpl implements UserDetails{
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	
-	public UserDetailsImpl() {
+	public MyUserDetails() {
 		
 	}
 
 
-	public UserDetailsImpl(Long id, String userName, String password, String email,
+	public MyUserDetails(Long id, String userName, String password, String email,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.userName = userName;
@@ -40,12 +40,12 @@ public class UserDetailsImpl implements UserDetails{
 	}
 	
 	
-	public static UserDetailsImpl build(User user) {
+	public static MyUserDetails build(User user) {
 		List<GrantedAuthority> authorities = user.getRoles().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getRoleName().name()))
 				.collect(Collectors.toList());
 		
-		return new UserDetailsImpl(
+		return new MyUserDetails(
 				user.getId(),
 				user.getUserName(),
 				user.getPassword(),

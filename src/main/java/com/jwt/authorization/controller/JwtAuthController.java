@@ -28,7 +28,7 @@ import com.jwt.authorization.payload.response.JwtResponse;
 import com.jwt.authorization.payload.response.MessageResponse;
 import com.jwt.authorization.repository.RoleRepository;
 import com.jwt.authorization.repository.UserRepository;
-import com.jwt.authorization.service.UserDetailsImpl;
+import com.jwt.authorization.service.MyUserDetails;
 import com.jwt.authorization.service.UserDetailsServiceImpl;
 import com.jwt.authorization.utility.JwtUtils;
 
@@ -72,7 +72,7 @@ public class JwtAuthController {
 		}
 				
 		
-		UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsServiceImpl.loadUserByUsername(loginRequest.getUserName());
+		MyUserDetails userDetails = (MyUserDetails) userDetailsServiceImpl.loadUserByUsername(loginRequest.getUserName());
 		
 		
 		String jwtToken = jwtUtils.generateToken(userDetails);
