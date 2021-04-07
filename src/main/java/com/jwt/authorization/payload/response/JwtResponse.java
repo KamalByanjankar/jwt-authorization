@@ -5,7 +5,6 @@ import java.util.List;
 public class JwtResponse {
 
 	private String jwtToken;
-	private String type = "Bearer";
 	private Long id;
 	private String username;
 	private String email;
@@ -32,16 +31,6 @@ public class JwtResponse {
 
 	public void setJwtToken(String jwtToken) {
 		this.jwtToken = jwtToken;
-	}
-
-
-	public String getType() {
-		return type;
-	}
-
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 

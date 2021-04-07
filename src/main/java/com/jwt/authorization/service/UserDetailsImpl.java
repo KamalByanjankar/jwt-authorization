@@ -25,7 +25,6 @@ public class UserDetailsImpl implements UserDetails{
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	
-	
 	public UserDetailsImpl() {
 		
 	}

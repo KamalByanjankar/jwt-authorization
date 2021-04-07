@@ -20,11 +20,10 @@ public class Role {
 	private ERole roleName;
 
 	public Role() {
-		super();
+
 	}
 
 	public Role(ERole roleName) {
-		super();
 		this.roleName = roleName;
 	}
 

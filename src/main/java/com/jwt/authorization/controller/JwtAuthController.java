@@ -85,7 +85,8 @@ public class JwtAuthController {
 				userDetails.getId(), 
 				userDetails.getUsername(), 
 				userDetails.getEmail(), 
-				roles));
+				roles)
+				);
 		
 	}
 	
@@ -93,7 +94,7 @@ public class JwtAuthController {
 	@RequestMapping(value="/signup", method = RequestMethod.POST)
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) throws Exception{
 		if(userRepository.existsByUserName(signupRequest.getUserName())) {
-			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username not available"));
+			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username already in exists"));
 		}
 		
 		if (userRepository.existsByEmail(signupRequest.getEmail())) {
