@@ -14,8 +14,7 @@ public class LoginRequest {
 
 	}
 
-	public LoginRequest(@NotBlank String userName, @NotBlank String password) {
-		super();
+	public LoginRequest(String userName, String password) {
 		this.userName = userName;
 		this.password = password;
 	}
